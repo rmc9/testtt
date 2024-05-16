@@ -6,7 +6,8 @@ export const Container = styled.div`
   ${FlexCenterStyle}
     flex-direction: column;
 
-  background: black;
+  // background: black;
+  cursor: none;
   canvas {
     width: 100%;
     height: 100%;
