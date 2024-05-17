@@ -20,4 +20,5 @@ export const Start = styled.div`
   background: black;
   position: fixed;
   z-index: 100;
+  color: white;
 `;

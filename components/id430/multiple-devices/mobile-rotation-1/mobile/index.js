@@ -7,8 +7,20 @@ import { OrbitControls, useFBX, Environment, MeshReflectorMaterial, useScroll, T
 
 import Tracker from "./tracker";
 
+import useSocket from "utils/hooks/socket/id430/mobile-rotation-1/useSocketMobile";
+
 export default function Component() {
   const [requestPermission, setRequestPermission] = useState(false);
+
+  const socket = useSocket();
+
+  useEffect(() => {
+    if (requestPermission) {
+      if (socket && socket.current) {
+        socket.current.emit("mobile-rotation-1-new-orientation", { hello: "world" });
+      }
+    }
+  }, [requestPermission]);
 
   return (
     <S.Container>
@@ -26,7 +38,7 @@ export default function Component() {
         <Stars />
       </Canvas>
 
-      <Tracker />
+      <Tracker requestPermission={requestPermission} setRequestPermission={setRequestPermission} socket={socket} />
     </S.Container>
   );
 }

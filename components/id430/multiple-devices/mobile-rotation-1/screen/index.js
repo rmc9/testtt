@@ -5,7 +5,17 @@ import * as THREE from "three";
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { OrbitControls, useFBX, Environment, MeshReflectorMaterial, useScroll, Text3D, Center, Stars, Instances, Instance, useTexture, Water } from "@react-three/drei";
 
+import useSocket from "utils/hooks/socket/id430/mobile-rotation-1/useSocketScreen";
+
 export default function Component() {
+  const socket = useSocket({
+    handleNewOrientation,
+  });
+
+  function handleNewOrientation(data) {
+    console.log(data);
+  }
+
   return (
     <S.Container>
       <Canvas
