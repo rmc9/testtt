@@ -17,7 +17,22 @@ export default function Component() {
 
         <InnerEl />
 
-        <group rotation={[0, -Math.PI / 4, 0]}>
+        <mesh position={[0, 0, -2]}>
+          <planeGeometry args={[30, 30]} />
+          <MeshReflectorMaterial
+            mixBlur={0}
+            mixStrength={1}
+            mixContrast={1}
+            resolution={2048}
+            mirror={1}
+            depthToBlurRatioBias={0.9}
+            debug={0}
+            //both side
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* <group rotation={[0, -Math.PI / 4, 0]}>
           <mesh position={[0, 0, -4]}>
             <planeGeometry args={[20, 20]} />
             <MeshReflectorMaterial
@@ -47,7 +62,7 @@ export default function Component() {
               side={THREE.DoubleSide}
             />
           </mesh>
-        </group>
+        </group> */}
 
         <OrbitControls />
       </Canvas>

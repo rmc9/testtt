@@ -3,7 +3,7 @@ import * as S from "./styles";
 
 import * as THREE from "three";
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
-import { ScrollControls, useScroll, Stars, Text3D, Center, MeshReflectorMaterial } from "@react-three/drei";
+import { ScrollControls, OrbitControls, useScroll, Stars, Text3D, Center, MeshReflectorMaterial } from "@react-three/drei";
 
 export default function Component() {
   return (
@@ -23,6 +23,7 @@ export default function Component() {
         </ScrollControls>
 
         <Stars radius={4} depth={5} count={5000} factor={4} saturation={0} fade speed={0.1} />
+        {/* <OrbitControls /> */}
       </Canvas>
     </S.Container>
   );
@@ -48,7 +49,7 @@ function InnerEl() {
       </mesh>
 
       <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[4, 64, 32]} />
+        <sphereGeometry args={[3 + scrollPos * 3, 64, 32]} />
         <MeshReflectorMaterial mixBlur={0} mixStrength={1} mixContrast={1} resolution={512} mirror={1} depthToBlurRatioBias={0.9} debug={0} side={THREE.BackSide} />
       </mesh>
     </>
