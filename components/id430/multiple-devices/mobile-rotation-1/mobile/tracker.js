@@ -2,10 +2,10 @@ import * as S from "./styles";
 import { useState, useEffect, useRef } from "react";
 import useDeviceOrientation from "utils/hooks/useDeviceOrientation";
 
-export default function Tracker({ requestPermission, setRequestPermission, socket }) {
+export default function Tracker({ requestPermission, setRequestPermission, socket, setOrientationData }) {
   return (
     <>
-      <TrackerEl requestPermission={requestPermission} socket={socket} />
+      <TrackerEl requestPermission={requestPermission} socket={socket} setOrientationData={setOrientationData} />
       {!requestPermission && (
         <S.Start
           onClick={() => {
@@ -21,7 +21,7 @@ export default function Tracker({ requestPermission, setRequestPermission, socke
   );
 }
 
-function TrackerEl({ requestPermission, socket }) {
+function TrackerEl({ requestPermission, socket, setOrientationData }) {
   const { permission, orientation } = useDeviceOrientation({ requestPermission });
 
   const orientationThenRef = useRef(Date.now());
@@ -34,6 +34,7 @@ function TrackerEl({ requestPermission, socket }) {
       orientationThenRef.current = now;
 
       if (socket && socket.current && orientation) {
+        setOrientationData(orientation);
         socket.current.emit("mobile-rotation-1-new-orientation", { ...orientation });
       }
     } catch (e) {

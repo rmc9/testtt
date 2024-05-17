@@ -14,6 +14,8 @@ export default function Component() {
 
   const socket = useSocket();
 
+  const [orientationData, setOrientationData] = useState({ alpha: 0, beta: 0, gamma: 0 });
+
   useEffect(() => {
     if (requestPermission) {
       if (socket && socket.current) {
@@ -33,12 +35,34 @@ export default function Component() {
         {/* <directionalLight position={[0, 10, 0]} intensity={1} /> */}
         <directionalLight position={[0, 10, 10]} intensity={1} />
 
-        <Environment preset="warehouse" />
-        <OrbitControls />
-        <Stars />
+        <InnerScene orientationData={orientationData} />
+        {/* <OrbitControls /> */}
       </Canvas>
 
-      <Tracker requestPermission={requestPermission} setRequestPermission={setRequestPermission} socket={socket} />
+      <Tracker requestPermission={requestPermission} setRequestPermission={setRequestPermission} socket={socket} setOrientationData={setOrientationData} />
     </S.Container>
+  );
+}
+
+function InnerScene({ orientationData }) {
+  const { camera } = useThree();
+
+  useFrame(() => {
+    if (orientationData) {
+      const { alpha, beta, gamma } = orientationData;
+      // Convert degrees to radians for Three.js
+      camera.rotation.set(THREE.MathUtils.degToRad(beta), THREE.MathUtils.degToRad(alpha), THREE.MathUtils.degToRad(-gamma));
+    }
+  });
+
+  return (
+    <>
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshNormalMaterial color={new THREE.Color(`hsl(100, 100%, 50%)`)} />
+      </mesh>
+      <Environment preset="warehouse" />
+      <Stars />
+    </>
   );
 }
