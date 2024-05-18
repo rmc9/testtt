@@ -2,11 +2,12 @@ import React, { useEffect, useState, useRef, useMemo, useCallback } from "react"
 import * as S from "./styles";
 
 import * as THREE from "three";
-import { Canvas, useThree, useFrame } from "@react-three/fiber";
+import { extend, Canvas, useThree, useFrame } from "@react-three/fiber";
 import { OrbitControls, useFBX, Environment, MeshReflectorMaterial, useScroll, Text3D, Center, Stars, Instances, Instance, useTexture, Water } from "@react-three/drei";
 
-import { Bloom } from "@react-three/postprocessing";
-import { BlurPass, EffectComposer, RenderPass } from "postprocessing";
+import { UnrealBloomPass } from "three-stdlib";
+
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 
 import useSocket from "utils/hooks/socket/id430/mobile-rotation-1/useSocketScreen";
 
@@ -44,7 +45,7 @@ export default function Component() {
 
           <OrbitControls />
           <Stars />
-          <BloomEffect />
+          <PostProcessingEl />
         </Canvas>
       </S.ThreeContainer>
 
@@ -115,6 +116,10 @@ function InnerScene({ orientationData }) {
   );
 }
 
-function BloomEffect() {
-  return <Bloom intensity={1} />;
+function PostProcessingEl() {
+  return (
+    <EffectComposer disableNormalPass>
+      <Bloom intensity={1} luminanceThreshold={0} luminanceSmoothing={0.1} height={400} />
+    </EffectComposer>
+  );
 }

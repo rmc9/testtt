@@ -19,7 +19,7 @@ export const Container = styled.div`
 export const ThreeContainer = styled.div`
   ${WholeContainer}
   ${FlexCenterStyle}
-    flex-direction: column;
+  flex-direction: column;
 
   cursor: none;
   canvas {
@@ -29,9 +29,14 @@ export const ThreeContainer = styled.div`
 `;
 
 export const QRContainer = styled.div`
-  position: absolute;
+  position: absolute !important;
   bottom: 20px;
   right: 20px;
   ${FlexCenterStyle}
   z-index: 10;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
