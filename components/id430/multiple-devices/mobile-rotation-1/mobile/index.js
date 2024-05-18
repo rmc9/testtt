@@ -28,7 +28,7 @@ export default function Component() {
     <S.Container>
       <Canvas
         camera={{
-          position: [0, 0, 25],
+          position: [0, 0, 0],
         }}
       >
         <ambientLight intensity={2} />
@@ -43,23 +43,38 @@ export default function Component() {
     </S.Container>
   );
 }
-
 function InnerScene({ orientationData }) {
   const { camera } = useThree();
 
   useFrame(() => {
     if (orientationData) {
       const { alpha, beta, gamma } = orientationData;
+
       // Convert degrees to radians for Three.js
-      camera.rotation.set(THREE.MathUtils.degToRad(beta), THREE.MathUtils.degToRad(alpha), THREE.MathUtils.degToRad(-gamma));
+      const alphaRad = THREE.MathUtils.degToRad(alpha);
+      const betaRad = THREE.MathUtils.degToRad(beta);
+      const gammaRad = THREE.MathUtils.degToRad(-gamma);
+
+      // Set camera rotation
+      camera.rotation.set(betaRad, alphaRad, gammaRad);
+
+      // Ensure the camera looks at the center
+      // camera.lookAt(0, 0, 0);
     }
   });
 
   return (
     <>
-      <mesh>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshNormalMaterial color={new THREE.Color(`hsl(100, 100%, 50%)`)} />
+      <mesh position={[0, -10, 0]}>
+        {/* <boxGeometry args={[1, 1, 1]} /> */}
+        <sphereGeometry args={[10, 32, 32]} />
+        <meshStandardMaterial
+          color={new THREE.Color(`hsl(100, 100%, 50%)`)}
+          //doubleside
+          side={THREE.DoubleSide}
+          roughness={0.1}
+          metalness={0.9}
+        />
       </mesh>
       <Environment preset="warehouse" />
       <Stars />
