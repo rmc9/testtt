@@ -1,49 +1,66 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import * as S from "./styles";
-
 import * as THREE from "three";
 import { extend, Canvas, useThree, useFrame } from "@react-three/fiber";
 import { OrbitControls, useFBX, Environment, MeshReflectorMaterial, useScroll, Text3D, Center, Stars, Instances, Instance, useTexture, Water } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
-
-import useSocket from "utils/hooks/socket/id430/mobile-rotation-2/useSocketScreen";
-
-import { Model } from "./model";
+import useSocket from "utils/hooks/socket/id430/mobile-letter/useSocketScreen";
 
 //qr code
 import { QRCodeSVG } from "qrcode.react";
-const QR_URL = "https://experiential-experiences-904af20e61d8.herokuapp.com/id430/multiple-devices/mobile-rotation-2/mobile";
+const QR_URL = "https://experiential-experiences-904af20e61d8.herokuapp.com/id430/multiple-devices/mobile-letter/mobile";
 
 const getRandom = (a, b) => Math.random() * (b - a) + a;
 
 export default function Component() {
   const socket = useSocket({
+    handleNewText,
     handleNewOrientation,
   });
 
   const [orientationData, setOrientationData] = useState({ alpha: 0, beta: 0, gamma: 0 });
-
   function handleNewOrientation(data) {
     setOrientationData(data);
+  }
+
+  const [textArrays, setTextArrays] = useState([]);
+  const [text, setText] = useState("");
+
+  function handleNewText(data) {
+    setTextArrays((arr) => {
+      let copied = [...arr];
+      //find if data.mobileId is redundant
+      const index = copied.findIndex((item) => item.mobileId === data.mobileId);
+      if (index !== -1) {
+        copied[index].text = data.text;
+        copied[index].color = data.color;
+      } else {
+        copied.push({
+          mobileId: data.mobileId,
+          text: data.text,
+          color: data.color,
+          position: [getRandom(-4, 3), getRandom(-5, 5), getRandom(-5, 3)],
+        });
+      }
+      return copied;
+    });
+
+    setText(data.text);
   }
 
   return (
     <S.Container>
       <S.ThreeContainer>
-        <Canvas
-          camera={{
-            position: [0, 0, 10],
-          }}
-        >
+        <Canvas>
           <ambientLight intensity={0.3} />
           <directionalLight position={[0, 10, 10]} intensity={1} color="red" />
 
-          <InnerScene orientationData={orientationData} />
-          <Environment
-            preset="dawn"
-            //show env
-            background={true}
-          />
+          {textArrays.map((item, index) => (
+            <InnerScene key={index} {...item} />
+          ))}
+          <Environment preset="dawn" />
+
+          <CameraRotate orientationData={orientationData} />
 
           <OrbitControls />
         </Canvas>
@@ -56,7 +73,7 @@ export default function Component() {
   );
 }
 
-function InnerScene({ orientationData }) {
+function CameraRotate({ orientationData }) {
   const { camera } = useThree();
 
   useFrame(() => {
@@ -81,9 +98,29 @@ function InnerScene({ orientationData }) {
       camera.lookAt(0, 0, 0);
     }
   });
+  return <></>;
+}
+
+function InnerScene({ text, position, color }) {
+  console.log(position);
   return (
-    <>
-      <Model position={[0, -8, 0]} />
-    </>
+    <group position={position}>
+      <Center>
+        <Text3D
+          font="/assets/fonts/Roboto_Regular.json" // You can use a custom font here
+          size={1}
+          height={0.5}
+          curveSegments={32}
+          bevelEnabled
+          bevelThickness={0.1}
+          bevelSize={0.05}
+          bevelOffset={0}
+          bevelSegments={8}
+        >
+          {text}
+          <meshStandardMaterial attach="material" color={color} metalness={0.8} roughness={0.1} />
+        </Text3D>
+      </Center>
+    </group>
   );
 }

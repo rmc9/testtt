@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 //id430
 import mobileRotation1Setup from "./id430/mobile-rotation-1";
 import mobileRotation2Setup from "./id430/mobile-rotation-2";
+import mobileLetterSetup from "./id430/mobile-letter";
 
 export default function handler(req, res) {
   if (res.socket.server.io) {
@@ -19,6 +20,8 @@ export default function handler(req, res) {
       mobileRotation1Setup({ socket, io });
       //mobile rotation 2
       mobileRotation2Setup({ socket, io });
+      //mobile letter
+      mobileLetterSetup({ socket, io });
     });
   }
 
