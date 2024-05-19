@@ -32,7 +32,6 @@ export default function Component() {
         const analyseAudio = () => {
           analyserRef.current.getByteFrequencyData(dataArrayRef.current);
           const audioData = Array.from(dataArrayRef.current);
-          console.log(audioData);
           if (socket && socket.current) {
             socket.current.emit("mobile-audio-new-data", { audioData, mobileId });
           }

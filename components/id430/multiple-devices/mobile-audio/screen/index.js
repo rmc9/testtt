@@ -16,8 +16,6 @@ export default function Component() {
   const [audioDatas, setAudioDatas] = useState([]);
 
   function handleNewData(data) {
-    console.log(data);
-
     //audiodatas update
     setAudioDatas((arr) => {
       let copied = [...arr];
