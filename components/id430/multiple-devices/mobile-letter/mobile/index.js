@@ -25,6 +25,7 @@ export default function Component() {
   return (
     <S.Container>
       <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type here..." />
+      <p>Color Picker</p>
       <input
         type="color"
         //custom styling
@@ -32,13 +33,13 @@ export default function Component() {
           width: "150px",
           height: "150px",
           borderRadius: "50%",
-          border: "none",
           cursor: "pointer",
+          // border: "1px solid white",
+          boxShadow: "0 0 10px 2px rgba(255, 255, 255, 1)",
         }}
         value={color}
         onChange={(e) => setColor(e.target.value)}
       />
-
       <Tracker requestPermission={requestPermission} setRequestPermission={setRequestPermission} socket={socket} setOrientationData={setOrientationData} />
     </S.Container>
   );

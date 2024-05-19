@@ -39,7 +39,7 @@ export default function Component() {
           mobileId: data.mobileId,
           text: data.text,
           color: data.color,
-          position: [getRandom(-4, 3), getRandom(-5, 5), getRandom(-5, 3)],
+          position: [getRandom(-4, 3), getRandom(-5, 5), getRandom(-5, 5)],
         });
       }
       return copied;
@@ -86,7 +86,7 @@ function CameraRotate({ orientationData }) {
       let gammaRad = THREE.MathUtils.degToRad(-gamma);
 
       // Spherical coordinates
-      const radius = 25; // distance from the center sphere
+      const radius = 15; // distance from the center sphere
       const x = radius * Math.sin(betaRad) * Math.cos(alphaRad);
       const y = radius * Math.sin(betaRad) * Math.sin(alphaRad);
       const z = radius * Math.cos(betaRad);
@@ -109,7 +109,7 @@ function InnerScene({ text, position, color }) {
         <Text3D
           font="/assets/fonts/Roboto_Regular.json" // You can use a custom font here
           size={1}
-          height={0.5}
+          height={0.2}
           curveSegments={32}
           bevelEnabled
           bevelThickness={0.1}

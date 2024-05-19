@@ -7,6 +7,14 @@ export const Container = styled.div`
     flex-direction: column;
 
   background: black;
+
+  p {
+    color: white;
+    font-size: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
   cursor: none;
 
   input {
