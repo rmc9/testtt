@@ -17,6 +17,7 @@
     "@tensorflow-models/face-landmarks-detection": "^1.0.5",
     "@tensorflow/tfjs": "^4.17.0",
     "axios": "^1.6.8",
+    "babel-plugin-styled-components": "^2.1.4",
     "d3-ease": "^3.0.1",
     "face-api.js": "^0.22.2",
     "fast-text-encoding": "^1.0.6",

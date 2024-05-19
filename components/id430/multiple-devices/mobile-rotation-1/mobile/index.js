@@ -16,14 +16,6 @@ export default function Component() {
 
   const [orientationData, setOrientationData] = useState({ alpha: 0, beta: 0, gamma: 0 });
 
-  useEffect(() => {
-    if (requestPermission) {
-      if (socket && socket.current) {
-        socket.current.emit("mobile-rotation-1-new-orientation", { hello: "world" });
-      }
-    }
-  }, [requestPermission]);
-
   return (
     <S.Container>
       <Canvas

@@ -22,7 +22,7 @@ export default function Component() {
           <InnerEl />
         </ScrollControls>
 
-        <Stars radius={4} depth={5} count={5000} factor={4} saturation={0} fade speed={0.1} />
+        <Stars radius={4} depth={5} count={5000} factor={4} saturation={0} fade speed={1} />
         {/* <OrbitControls /> */}
       </Canvas>
     </S.Container>
@@ -41,7 +41,7 @@ function InnerEl() {
 
   return (
     <>
-      <directionalLight position={[10 * Math.cos(scrollPos * Math.PI), 0, 10 * Math.sin(scrollPos * Math.PI)]} intensity={1} />
+      <directionalLight position={[0, 10 * Math.cos(scrollPos * Math.PI * 3), 10 * Math.sin(scrollPos * Math.PI * 3)]} intensity={1} />
 
       <mesh castShadow receiveShadow>
         <sphereGeometry args={[2, 64, 32]} />
