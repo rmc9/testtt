@@ -29,11 +29,11 @@ export default function Component() {
       </S.Comp>
 
       <S.Comp>
-        <h1>Multiple Devices</h1>
+        <h1>Multiple Devices Examples</h1>
         <S.List>
           {MULTIPLE_ARRAY.map((item, index) => (
             <S.Item key={index}>
-              <Link href={`/id430/multiple-devices/${item}`}>{kebabToTitleCase(item)}</Link>
+              <Link href={`/id430/multiple-devices/${item}/screen`}>{kebabToTitleCase(item)}</Link>
             </S.Item>
           ))}
         </S.List>
