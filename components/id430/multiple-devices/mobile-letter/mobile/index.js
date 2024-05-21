@@ -32,7 +32,6 @@ export default function Component() {
         style={{
           width: "150px",
           height: "150px",
-          borderRadius: "50%",
           cursor: "pointer",
           // border: "1px solid white",
           boxShadow: "0 0 10px 2px rgba(255, 255, 255, 1)",

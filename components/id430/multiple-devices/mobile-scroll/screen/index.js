@@ -6,6 +6,8 @@ import { OrbitControls, useFBX, Environment, MeshReflectorMaterial, useScroll, T
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import useSocket from "utils/hooks/socket/id430/mobile-scroll/useSocketScreen";
 
+const INTERVAL = Math.sqrt(2);
+
 //qr code
 import { QRCodeSVG } from "qrcode.react";
 const QR_URL = "https://experiential-experiences-904af20e61d8.herokuapp.com/id430/multiple-devices/mobile-scroll/mobile";
@@ -21,10 +23,14 @@ export default function Component() {
     //do a similar thing with scrollposes
     setScrollPoses((arr) => {
       let copied = [...arr];
-      const index = copied.findIndex((item) => item.mobileId === data.mobileId);
-      if (index !== -1) {
-        copied[index].scrollPos = data.scrollPos;
-        copied[index].colorHue = data.colorHue;
+
+      const filtered = copied.filter((item) => item.mobileId == data.mobileId);
+
+      if (filtered.length > 0) {
+        filtered.forEach((el) => {
+          el.scrollPos = data.scrollPos;
+          el.colorHue = data.colorHue;
+        });
       } else {
         copied.push({
           mobileId: data.mobileId,
@@ -32,6 +38,7 @@ export default function Component() {
           colorHue: data.colorHue,
         });
       }
+
       return copied;
     });
   }
@@ -41,14 +48,34 @@ export default function Component() {
   return (
     <S.Container>
       <S.ThreeContainer>
-        <Canvas>
+        <Canvas
+          //camera pos
+          camera={{
+            position: [0, 0, 20],
+          }}
+        >
           <ambientLight intensity={0.2} />
           <directionalLight position={[0, 10, 10]} intensity={1} color="white" />
 
-          <Environment preset="dawn" />
-          {scrollPoses.map((el, i) => (
-            <El key={i} scrollPos={el.scrollPos} position={[(i - scrollPoses.length / 2) * 1, 0, 0]} colorHue={el.colorHue} />
-          ))}
+          <Environment preset="forest" />
+          {new Array(9).fill(0).map((_, j) => {
+            return scrollPoses.map((el, i) => <El key={i} scrollPos={el.scrollPos} position={[0, (j - 4) * INTERVAL, (i - scrollPoses.length / 2) * INTERVAL]} j={j} colorHue={el.colorHue} />);
+          })}
+
+          <mesh position={[0, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <planeGeometry args={[30, 30]} />
+            <MeshReflectorMaterial
+              mixBlur={0}
+              mixStrength={1}
+              mixContrast={1}
+              resolution={2048}
+              mirror={1}
+              depthToBlurRatioBias={0.9}
+              debug={0}
+              //both side
+              side={THREE.DoubleSide}
+            />
+          </mesh>
 
           <OrbitControls />
         </Canvas>
@@ -61,17 +88,17 @@ export default function Component() {
   );
 }
 
-function El({ scrollPos, position, colorHue }) {
+function El({ scrollPos, position, colorHue, j }) {
   const meshRef = useRef();
 
   useFrame(() => {
-    meshRef.current.rotation.x = scrollPos * Math.PI * 3;
+    meshRef.current.rotation.x = (scrollPos + j * 0.02) * Math.PI * 3;
   });
 
   return (
-    <mesh ref={meshRef} position={position}>
-      <boxGeometry attach="geometry" args={[1, 1, 1]} />
-      <meshStandardMaterial attach="material" color={new THREE.Color(`hsl(${colorHue}, 100%, 50%)`)} roughness={0.2} metalness={0.8} />
+    <mesh ref={meshRef} position={position} rotation={[0, 0, 0]}>
+      <boxGeometry args={[50, 1, 1]} />
+      <meshStandardMaterial attach="material" color={new THREE.Color(`hsl(${colorHue}, 100%, 50%)`)} roughness={0} metalness={1} />
     </mesh>
   );
 }

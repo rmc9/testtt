@@ -3,22 +3,25 @@ import { FlexCenterStyle, WholeContainer } from "styles/common";
 
 export const Container = styled.div`
   ${WholeContainer}
-  ${FlexCenterStyle}
+  display: flex;
+  align-items: center;
   flex-direction: column;
   background: #f5f5f5;
   padding: 20px;
   font-family: "Roboto", sans-serif;
   color: #333;
+  overflow-y: scroll;
 `;
 
 export const Comp = styled.div`
   width: 100%;
   max-width: 800px;
   margin: 20px 0;
+  // min-height: 100%;
+  margin-bottom: 40px !important;
   background: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  overflow: hidden;
 
   h1 {
     background: #6200ea;
@@ -55,7 +58,6 @@ export const Item = styled.li`
   }
 
   &:last-child a {
-    padding-bottom: 50px;
     border-bottom: none;
   }
 `;

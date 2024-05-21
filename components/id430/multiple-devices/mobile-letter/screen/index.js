@@ -30,16 +30,40 @@ export default function Component() {
     setTextArrays((arr) => {
       let copied = [...arr];
       //find if data.mobileId is redundant
-      const index = copied.findIndex((item) => item.mobileId === data.mobileId);
-      if (index !== -1) {
-        copied[index].text = data.text;
-        copied[index].color = data.color;
+      //find all
+      const filteredData = data.mobileId ? copied.filter((item) => item.mobileId === data.mobileId) : copied;
+
+      if (filteredData.length > 0) {
+        filteredData.map((el, i) => {
+          el.text = data.text;
+          el.color = data.color;
+        });
       } else {
+        let currLen = copied.length / 2;
+
         copied.push({
           mobileId: data.mobileId,
           text: data.text,
           color: data.color,
-          position: [getRandom(-4, 3), getRandom(-5, 5), getRandom(-5, 5)],
+          position: [-5, currLen, 0],
+        });
+        copied.push({
+          mobileId: data.mobileId,
+          text: data.text,
+          color: data.color,
+          position: [-5, -currLen, 0],
+        });
+        copied.push({
+          mobileId: data.mobileId,
+          text: data.text,
+          color: data.color,
+          position: [-5, 0, currLen],
+        });
+        copied.push({
+          mobileId: data.mobileId,
+          text: data.text,
+          color: data.color,
+          position: [-5, 0, -currLen],
         });
       }
       return copied;
@@ -54,14 +78,11 @@ export default function Component() {
         <Canvas>
           <ambientLight intensity={0.3} />
           <directionalLight position={[0, 10, 10]} intensity={1} color="red" />
-
           {textArrays.map((item, index) => (
             <InnerScene key={index} {...item} />
           ))}
           <Environment preset="dawn" />
-
           <CameraRotate orientationData={orientationData} />
-
           <OrbitControls />
         </Canvas>
       </S.ThreeContainer>
@@ -102,25 +123,12 @@ function CameraRotate({ orientationData }) {
 }
 
 function InnerScene({ text, position, color }) {
-  console.log(position);
   return (
     <group position={position}>
-      <Center>
-        <Text3D
-          font="/assets/fonts/Roboto_Regular.json" // You can use a custom font here
-          size={1}
-          height={0.2}
-          curveSegments={32}
-          bevelEnabled
-          bevelThickness={0.1}
-          bevelSize={0.05}
-          bevelOffset={0}
-          bevelSegments={8}
-        >
-          {text}
-          <meshStandardMaterial attach="material" color={color} metalness={0.8} roughness={0.1} />
-        </Text3D>
-      </Center>
+      <Text3D font="/assets/fonts/Roboto_Regular.json" size={1} height={0.2} curveSegments={32} bevelEnabled bevelThickness={0.1} bevelSize={0.05} bevelOffset={0} bevelSegments={8}>
+        {text}
+        <meshStandardMaterial attach="material" color={color} metalness={0.8} roughness={0.1} />
+      </Text3D>
     </group>
   );
 }
