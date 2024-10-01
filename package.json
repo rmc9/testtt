@@ -9,18 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mediapipe/face_mesh": "^0.4.1633559619",
     "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.105.4",
     "@react-three/fiber": "^8.16.2",
     "@react-three/postprocessing": "^2.16.2",
-    "@tensorflow-models/face-landmarks-detection": "^1.0.5",
-    "@tensorflow/tfjs": "^4.17.0",
     "axios": "^1.6.8",
     "babel-plugin-styled-components": "^2.1.4",
     "d3-ease": "^3.0.1",
-    "face-api.js": "^0.22.2",
-    "fast-text-encoding": "^1.0.6",
     "next": "14.1.4",
     "qrcode.react": "^3.1.0",
     "react": "^18",
@@ -30,7 +25,6 @@
     "styled-components": "^6.1.8",
     "three": "^0.163.0",
     "three-stdlib": "^2.30.0",
-    "uuid": "^9.0.1",
-    "webgazer": "^3.3.0"
+    "uuid": "^9.0.1"
   }
 }
