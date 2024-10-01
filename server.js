@@ -9,7 +9,7 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-const PORT = 4000;
+const PORT = 6000;
 
 const httpsOptions = {
   key: fs.readFileSync("./key.pem"),
