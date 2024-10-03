@@ -14,7 +14,8 @@ export default async function handler(req, res) {
       ],
     });
 
-    const result = response.data.choices[0].message.content;
+    console.log(response);
+    const result = response.choices[0].message.content;
     res.status(200).json({ text: result });
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch data from OpenAI" });
