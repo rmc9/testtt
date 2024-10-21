@@ -1,4 +1,4 @@
-import Main from "components/id430/single-device/scroller-2";
+import Main from "components/convd4/w7-three/scroller-2";
 
 export default function Page() {
   return <Main />;
