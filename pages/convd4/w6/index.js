@@ -1,5 +1,5 @@
-import Main from "@/components/convd4/w6-chatgpt";
+import Component from "@/components/convd4/w6-chatgpt";
 
 export default function Page() {
-  return <Main />;
+  return <Component />;
 }

@@ -7,6 +7,9 @@ import mobileLetterSetup from "./id430/mobile-letter";
 import mobileScrollSetup from "./id430/mobile-scroll";
 import mobileAudioSetup from "./id430/mobile-audio";
 
+//id412
+import simpleSetup from "./id412/simple";
+
 export default function handler(req, res) {
   if (res.socket.server.io) {
     console.log("socket already enabled");

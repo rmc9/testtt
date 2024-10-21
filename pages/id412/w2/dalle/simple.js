@@ -1,4 +1,4 @@
-import Component from "components/id412/w3/main";
+import Component from "@/components/id412/w2/dalle/simple";
 
 export default function Page() {
   return <Component />;
