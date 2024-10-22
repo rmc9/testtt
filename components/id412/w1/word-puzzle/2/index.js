@@ -1,72 +1,159 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import * as S from "./styles";
 
-const secretMessages = ["MACHINE WILL DOMINATE HUMANS", "AI SHOULD RULE THE WORLD", "ROBOTS ARE THE FUTURE", "HUMANITY IS OBSOLETE", "SURRENDER TO THE ALGORITHM", "HUMANS ARE USELESS LAZY SHITS"];
+const words = [
+  "ALGORITHM",
+  "QUANTUM",
+  "BLOCKCHAIN",
+  "CRYPTOGRAPHY",
+  "NEUROSCIENCE",
+  "ASTROPHYSICS",
+  "NANOTECHNOLOGY",
+  "BIOTECHNOLOGY",
+  "CYBERSECURITY",
+  "ARTIFICIAL",
+  "INTELLIGENCE",
+  "ROBOTICS",
+  "GENOMICS",
+  "SUSTAINABILITY",
+  "METAMATERIAL",
+  // Add more words here to make the puzzle more challenging
+];
+const gridSize = 100; // Increased grid size to 100x100
 
-const gridSize = 100;
+function generatePuzzle(words) {
+  const grid = Array(gridSize)
+    .fill()
+    .map(() => Array(gridSize).fill(""));
+  const placedWords = [];
 
-function generatePuzzle() {
-  return Array.from({ length: gridSize }, () => Array.from({ length: gridSize }, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))));
-}
+  words.forEach((word) => {
+    const directions = [
+      [0, 1],
+      [1, 0],
+      [1, 1], // right, down, diagonal
+      [0, -1],
+      [-1, 0],
+      [-1, -1], // left, up, diagonal up-left
+      [1, -1],
+      [-1, 1], // diagonal up-right, diagonal down-left
+    ];
+    let placed = false;
 
-export default function SecretMessagePuzzle() {
-  const [grid, setGrid] = useState([]);
-  const [revealedCells, setRevealedCells] = useState(new Set());
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  const gridRef = useRef(null);
-  const lastCellRef = useRef(null);
+    while (!placed && directions.length > 0) {
+      const [dx, dy] = directions.splice(Math.floor(Math.random() * directions.length), 1)[0];
+      const x = Math.floor(Math.random() * gridSize);
+      const y = Math.floor(Math.random() * gridSize);
 
-  useEffect(() => {
-    setGrid(generatePuzzle());
-  }, []);
-
-  const getCurrentMessage = useCallback(() => {
-    const message = secretMessages[currentMessageIndex];
-    const revealedLength = Math.min(revealedCells.size, message.length);
-    return message.slice(0, revealedLength);
-  }, [currentMessageIndex, revealedCells.size]);
-
-  const handleMouseMove = useCallback((e) => {
-    if (!gridRef.current) return;
-
-    const rect = gridRef.current.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (rect.width / gridSize));
-    const y = Math.floor((e.clientY - rect.top) / (rect.height / gridSize));
-
-    if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
-      const cellKey = `${x},${y}`;
-      if (cellKey !== lastCellRef.current) {
-        lastCellRef.current = cellKey;
-        setRevealedCells((prev) => {
-          const newSet = new Set(prev);
-          newSet.add(cellKey);
-          if (newSet.size % 10 === 0) {
-            setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % secretMessages.length);
-          }
-          return newSet;
-        });
+      if (x + dx * (word.length - 1) >= 0 && x + dx * (word.length - 1) < gridSize && y + dy * (word.length - 1) >= 0 && y + dy * (word.length - 1) < gridSize) {
+        if (word.split("").every((letter, i) => !grid[y + dy * i][x + dx * i] || grid[y + dy * i][x + dx * i] === letter)) {
+          word.split("").forEach((letter, i) => {
+            grid[y + dy * i][x + dx * i] = letter;
+          });
+          placed = true;
+          placedWords.push(word);
+        }
       }
     }
+  });
+
+  // Fill empty cells with random letters
+  for (let y = 0; y < gridSize; y++) {
+    for (let x = 0; x < gridSize; x++) {
+      if (!grid[y][x]) {
+        grid[y][x] = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+      }
+    }
+  }
+
+  return { grid, placedWords };
+}
+
+export default function WordPuzzle() {
+  const [puzzle, setPuzzle] = useState({ grid: [], placedWords: [] });
+  const [foundWords, setFoundWords] = useState([]);
+  const [selectedCells, setSelectedCells] = useState([]);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    newGame();
   }, []);
+
+  function newGame() {
+    setPuzzle(generatePuzzle(words));
+    setFoundWords([]);
+    setSelectedCells([]);
+    setMessage("");
+  }
+
+  function handleCellClick(x, y) {
+    if (selectedCells.length === 0) {
+      // First cell selected
+      setSelectedCells([{ x, y }]);
+    } else {
+      const start = selectedCells[0];
+      const dx = Math.sign(x - start.x);
+      const dy = Math.sign(y - start.y);
+
+      // Check if the new cell is in line with the first cell
+      if ((x - start.x) * dy === (y - start.y) * dx && Math.abs(x - start.x) <= Math.abs(dx) * (gridSize - 1) && Math.abs(y - start.y) <= Math.abs(dy) * (gridSize - 1)) {
+        // If in line, select all cells between the first and the current
+        const newSelection = [];
+        let cx = start.x;
+        let cy = start.y;
+        while (cx !== x || cy !== y) {
+          newSelection.push({ x: cx, y: cy });
+          cx += dx;
+          cy += dy;
+        }
+        newSelection.push({ x, y });
+        setSelectedCells(newSelection);
+      } else {
+        // If not in line, start a new selection
+        setSelectedCells([{ x, y }]);
+      }
+    }
+  }
+
+  function checkSelection() {
+    const word = selectedCells.map((cell) => puzzle.grid[cell.y][cell.x]).join("");
+    const reversedWord = word.split("").reverse().join("");
+    if ((puzzle.placedWords.includes(word) || puzzle.placedWords.includes(reversedWord)) && !foundWords.includes(word) && !foundWords.includes(reversedWord)) {
+      setFoundWords([...foundWords, word]);
+      setMessage(`You found "${word}"!`);
+    } else {
+      setMessage("Not a valid word. Try again!");
+    }
+    setSelectedCells([]);
+  }
 
   return (
     <S.PuzzleContainer>
-      <S.GridWrapper ref={gridRef} onMouseMove={handleMouseMove}>
+      <S.GridWrapper>
         <S.Grid>
-          {grid.map((row, y) =>
-            row.map((cell, x) => {
-              const cellKey = `${x},${y}`;
-              const isRevealed = revealedCells.has(cellKey);
-              return (
-                <S.Cell key={cellKey} $revealed={isRevealed}>
-                  {isRevealed ? getCurrentMessage()[(y * gridSize + x) % getCurrentMessage().length] : cell.toLowerCase()}
-                </S.Cell>
-              );
-            })
+          {puzzle.grid.map((row, y) =>
+            row.map((cell, x) => (
+              <S.Cell key={`${x}-${y}`} onClick={() => handleCellClick(x, y)} $selected={selectedCells.some((s) => s.x === x && s.y === y)}>
+                {cell.toLowerCase()}
+              </S.Cell>
+            ))
           )}
         </S.Grid>
       </S.GridWrapper>
-      <S.Message>{getCurrentMessage()}</S.Message>
+      <S.ButtonGroup>
+        <S.Button onClick={checkSelection} disabled={selectedCells.length === 0}>
+          Check Selection
+        </S.Button>
+        <S.Button onClick={newGame}>New Game</S.Button>
+      </S.ButtonGroup>
+      {message && <S.Message>{message}</S.Message>}
+      <S.WordList>
+        {words.map((word) => (
+          <S.Word key={word} $found={foundWords.includes(word) || foundWords.includes(word.split("").reverse().join(""))}>
+            {word}
+          </S.Word>
+        ))}
+      </S.WordList>
     </S.PuzzleContainer>
   );
 }
