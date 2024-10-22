@@ -1,30 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as S from "./styles";
 
-const images = ["/assets/id412/w1/images/1.webp", "/assets/id412/w1/images/2.webp", "/assets/id412/w1/images/3.webp", "/assets/id412/w1/images/4.webp"];
+const images = ["/assets/id412/w1/images/1.png", "/assets/id412/w1/images/2.png", "/assets/id412/w1/images/3.png", "/assets/id412/w1/images/4.png", "/assets/id412/w1/images/5.png"];
 
-const gridSize = 5; // This can be changed to any number
+const blendModes = [
+  "overlay",
+  "multiply",
+  "screen",
+  "soft-light",
+  "hard-light",
+  "color-dodge",
+  "color-burn",
+  "darken",
+  "lighten",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity",
+];
 
 export default function ImageDisplay() {
-  const totalCells = gridSize * gridSize;
+  const [layers, setLayers] = useState([]);
+
+  const generateLayers = () => {
+    const layerCount = Math.floor(Math.random() * 5) + 5; // 3 to 7 layers
+    return [...Array(layerCount)].map((_, index) => ({
+      id: Date.now() + index,
+      imageIndex: Math.floor(Math.random() * images.length),
+      blendMode: blendModes[Math.floor(Math.random() * blendModes.length)],
+      opacity: Math.random() * 0.5 + 0.5, // 0.5 to 1
+      scale: Math.random() * 0.5 + 0.75, // 0.75 to 1.25
+      position: {
+        x: 0,
+        y: 0,
+      },
+    }));
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLayers(generateLayers());
+    }, 40); // Change composition every 3 seconds
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <S.Container>
-      <S.ImageContainer $gridSize={gridSize}>
-        {[...Array(totalCells)].map((_, index) => {
-          const row = Math.floor(index / gridSize);
-          const col = index % gridSize;
-          const shouldReverseX = col % 2 !== 0;
-          const shouldReverseY = row % 2 !== 0;
-          const imageIndex = index % images.length;
-
-          return (
-            <S.GridItem key={index}>
-              <S.StyledImage src={images[imageIndex]} alt={`Sample Image ${imageIndex + 1}`} />
-            </S.GridItem>
-          );
-        })}
-      </S.ImageContainer>
+      {layers.map((layer) => (
+        <S.ImageLayer key={layer.id} $blendMode={layer.blendMode} $opacity={layer.opacity} $scale={layer.scale} $positionX={layer.position.x} $positionY={layer.position.y}>
+          <S.StyledImage src={images[layer.imageIndex]} alt={`Image Layer ${layer.id}`} />
+        </S.ImageLayer>
+      ))}
     </S.Container>
   );
 }
