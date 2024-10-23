@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./styles";
 
-const images = ["/assets/id412/w1/images/1.png", "/assets/id412/w1/images/2.png", "/assets/id412/w1/images/3.png", "/assets/id412/w1/images/4.png", "/assets/id412/w1/images/5.png"];
+const images = ["/assets/id412/w1/images/1.png", "/assets/id412/w1/images/2.png", "/assets/id412/w1/images/3.png", "/assets/id412/w1/images/4.png"];
 
 const blendModes = [
   "overlay",
@@ -31,7 +31,7 @@ export default function ImageDisplay() {
       imageIndex: Math.floor(Math.random() * images.length),
       blendMode: blendModes[Math.floor(Math.random() * blendModes.length)],
       opacity: Math.random() * 0.5 + 0.5, // 0.5 to 1
-      scale: Math.random() * 0.5 + 0.75, // 0.75 to 1.25
+      scale: Math.random() * 0.5 + 1, // 0.75 to 1.25
       position: {
         x: 0,
         y: 0,
