@@ -1,13 +1,13 @@
 import { Server } from "socket.io";
 
-//id430
+//three.js
 import mobileRotation1Setup from "./id430/mobile-rotation-1";
 import mobileRotation2Setup from "./id430/mobile-rotation-2";
 import mobileLetterSetup from "./id430/mobile-letter";
 import mobileScrollSetup from "./id430/mobile-scroll";
 import mobileAudioSetup from "./id430/mobile-audio";
 
-//id412
+//id412 w2
 import simpleSetup from "./id412/simple";
 
 export default function handler(req, res) {
@@ -31,6 +31,8 @@ export default function handler(req, res) {
       mobileScrollSetup({ socket, io });
       //mobile audio
       mobileAudioSetup({ socket, io });
+      //simple
+      simpleSetup({ socket, io });
     });
   }
 
