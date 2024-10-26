@@ -1,19 +1,14 @@
 import styled from "styled-components";
-import { FlexCenterStyle, WholeContainerStyle } from "@/styles/common";
+import { FlexCenterStyle, WholeContainer } from "@/styles/common";
 
 export const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  position: relative;
+  background: black;
+  ${WholeContainer}
+  ${FlexCenterStyle}
 `;
 
 export const Counter = styled.div`
-  font-size: 50%;
+  font-size: 3vw;
   color: white;
   font-weight: bold;
   position: absolute;

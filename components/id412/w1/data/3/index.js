@@ -58,13 +58,6 @@ export default function DataVisual() {
     return `${Math.sqrt(price) * 5}vmin`;
   };
 
-  const calculateFontSize = (price) => {
-    // Adjust these values to fine-tune the font size
-    const baseFontSize = 6;
-    const scaleFactor = 0.015;
-    return `${baseFontSize - Math.log(price) * scaleFactor}vmin`;
-  };
-
   return (
     <S.Container>
       <S.Circle
@@ -73,7 +66,7 @@ export default function DataVisual() {
           height: calculateCircleSize(stockPrice),
         }}
       >
-        <S.Counter style={{ fontSize: calculateFontSize(stockPrice) }}>{"$" + stockPrice.toFixed(2)}</S.Counter>
+        <S.Counter>{"$" + stockPrice.toFixed(2)}</S.Counter>
       </S.Circle>
       <S.DateDisplay>{currentDate}</S.DateDisplay>
       {!isRunning && <S.StartButton onClick={handleStart}>Start</S.StartButton>}
