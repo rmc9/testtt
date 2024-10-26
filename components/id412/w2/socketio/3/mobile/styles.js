@@ -4,34 +4,30 @@ import { FlexCenterStyle, WholeContainer } from "styles/common";
 export const Container = styled.div`
   ${WholeContainer}
   ${FlexCenterStyle}
-    flex-direction: column;
-
+  flex-direction: column;
   background: black;
 `;
 
-export const InputGroup = styled.div`
-  margin-bottom: 15px;
+export const TouchArea = styled.div`
   width: 80%;
-`;
-
-export const Label = styled.label`
+  height: 60vh;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid white;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
-  display: block;
-  margin-bottom: 5px;
+  font-size: 18px;
+  user-select: none;
+  margin-bottom: 20px;
 `;
 
-export const Input = styled.input`
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-export const Button = styled.button`
+export const ResetButton = styled.button`
   background-color: #4caf50;
   border: none;
   color: white;
-  padding: 10px 20px;
+  padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;

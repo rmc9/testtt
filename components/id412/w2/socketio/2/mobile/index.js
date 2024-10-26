@@ -4,19 +4,32 @@ import useSocket from "utils/hooks/socket/id412/simple/useSocketMobile";
 
 export default function Component() {
   const socket = useSocket();
-  const [color, setColor] = useState("#000000");
+  const [systemContent, setSystemContent] = useState("");
+  const [userContent, setUserContent] = useState("");
 
-  const handleColorChange = (e) => {
-    const newColor = e.target.value;
-    setColor(newColor);
-    socket.current.emit("simple-new-action", { type: "changeColor", color: newColor });
+  const handleSubmit = () => {
+    if (systemContent && userContent) {
+      socket.current.emit("simple-new-action", {
+        type: "chatRequest",
+        systemContent,
+        userContent,
+      });
+      setUserContent(""); // Clear user input after sending
+    }
   };
 
   return (
     <S.Container>
-      <h2 style={{ color: "white", marginBottom: "20px" }}>Change Screen Color</h2>
-      <input type="color" value={color} onChange={handleColorChange} style={{ width: "100px", height: "100px" }} />
-      <p style={{ color: "white", marginTop: "20px" }}>Selected Color: {color}</p>
+      <h2 style={{ color: "white", marginBottom: "20px" }}>Chat with GPT</h2>
+      <S.InputGroup>
+        <S.Label>System:</S.Label>
+        <S.Input type="text" value={systemContent} onChange={(e) => setSystemContent(e.target.value)} placeholder="Enter system content" />
+      </S.InputGroup>
+      <S.InputGroup>
+        <S.Label>User:</S.Label>
+        <S.Input type="text" value={userContent} onChange={(e) => setUserContent(e.target.value)} placeholder="Enter your message" />
+      </S.InputGroup>
+      <S.Button onClick={handleSubmit}>Send</S.Button>
     </S.Container>
   );
 }

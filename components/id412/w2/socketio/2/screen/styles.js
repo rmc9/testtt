@@ -17,31 +17,20 @@ export const Container = styled.div`
   }
 `;
 
-export const ThreeContainer = styled.div`
-  ${WholeContainer}
-  ${FlexCenterStyle}
-  flex-direction: column;
-
-  cursor: none;
-  canvas {
-    width: 100vw;
-    height: 100vh;
-  }
+export const ChatContainer = styled.div`
+  width: 80%;
+  height: 70vh;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
 `;
 
-export const QRContainer = styled.div`
-  position: absolute !important;
-  bottom: 20px !important;
-  right: 20px !important;
-  top: auto !important;
-  left: auto !important;
-
-  ${FlexCenterStyle}
-  z-index: 10;
-
-  img {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
+export const MessageBubble = styled.div`
+  background-color: ${(props) => (props.role === "user" ? "rgba(0, 0, 255, 0.2)" : "rgba(0, 255, 0, 0.2)")};
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: white;
 `;
